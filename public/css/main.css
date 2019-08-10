@@ -1,0 +1,10 @@
+.pagination {
+	list-style: none;
+	display: flex;
+}
+.pagination .page-item {
+	padding: 0 5px;
+}
+.pagination .page-item.active {
+	background-color: #5eb5e0;
+}
