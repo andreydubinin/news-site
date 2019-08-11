@@ -9,8 +9,9 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>News</h1>
-
+    <h2>News</h2>
+    <a href="{{ path('admin.news.create') }}">Create news</a>
+    <a href="{{ path('admin') }}">Back</a>
     <table>
         <thead>
         <tr>
@@ -38,6 +39,7 @@
                     </a>
                 {% endif %}
             </td>
+            <td>Active</td>
         </tr>
         </thead>
         <tbody>
@@ -45,10 +47,11 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>
-                    <a href="{{ path('news.show', {'slug': item.slug}) }}">{{ item.name }}</a>
+                    <a href="{{ path('admin.news.edit', {'id': item.id}) }}">{{ item.name }}</a>
                 </td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.createdAt|date('d.m.Y h:i:s') }}</td>
+                <td>{{ item.isActive ? 'yes' : 'no' }}</td>
             </tr>
         {% endfor %}
         </tbody>

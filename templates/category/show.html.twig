@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}News{% endblock %}
+{% block title %}news detail{% endblock %}
 
 {% block body %}
 <style>
@@ -9,22 +9,11 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>News</h1>
-
+    <h1>{{ category.name }}</h1>
     <table>
         <thead>
         <tr>
-            <td>
-                {% if app.request.get('order') == 'asc' %}
-                    <a href="?sort=id&order=desc">
-                        id
-                    </a>
-                {% else %}
-                    <a href="?sort=id&order=asc">
-                        id
-                    </a>
-                {% endif %}
-            </td>
+            <td>id</td>
             <td>name</td>
             <td>description</td>
             <td>
@@ -54,5 +43,6 @@
         </tbody>
     </table>
     {% include '_pagination.html.twig' with {'last_page': last_page, 'page_name': 'news'} %}
+    <a href="{{ path('homepage') }}">Home</a>
 </div>
 {% endblock %}

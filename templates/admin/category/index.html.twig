@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h2>Categories</h2>
+    <a href="{{ path('admin.category.create') }}">Create category</a>
+    <a href="{{ path('admin') }}">Back</a>
+    <table>
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>name</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in categories %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>
+                    <a href="{{ path('admin.category.edit', {'id': item.id}) }}">{{ item.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include '_pagination.html.twig' with {'last_page': last_page, 'page_name': 'categories'} %}
+</div>
+{% endblock %}

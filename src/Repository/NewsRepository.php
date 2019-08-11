@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\News;
 use App\Repository\Contracts\NewsRepositoryInterface;
+use App\Repository\Traits\SetFilterTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -16,43 +17,46 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class NewsRepository extends ServiceEntityRepository implements NewsRepositoryInterface
 {
+    use SetFilterTrait;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, News::class);
     }
 
-    public function createQuery(string $name = ''): QueryBuilder
+    /**
+     * @param array $filters
+     * @return QueryBuilder
+     */
+    public function createNewsQueryBuilder(array $filters = []): QueryBuilder
     {
-        //return $this->_em->createQueryBuilder()->select($name)->from($this->_entityName, $name);
-        return $this->createQueryBuilder($name);
+        $queryBuilder = parent::createQueryBuilder('news');
+        if (!empty($filters)) {
+            $this->setFilter($queryBuilder, $filters, 'news');
+        }
+        return $queryBuilder;
     }
 
-    // /**
-    //  * @return News[] Returns an array of News objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param News $news
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function remove(News $news): void
     {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->getEntityManager()->remove($news);
+        $this->getEntityManager()->flush();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?News
+    /**
+     * @param News $news
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(News $news): void
     {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($news);
+        $entityManager->flush();
     }
-    */
 }

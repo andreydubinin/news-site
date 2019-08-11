@@ -9,12 +9,44 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Новости</h1>
+    <h2>Categories</h2>
+    {% macro menu_links(category, depth = 1) %}
+        {% if category %}
+            <li>
+                <a href="{{ path('category.show', {'slug': category.slug}) }}">{{ category.name }}</a>
+                {% if category.children|length and depth < 5 %}
+                    <ul>
+                        {% for child in category.children %}
+                            {{ _self.menu_links(child, depth + 1) }}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endmacro %}
+
+    {% from _self import menu_links %}
+    <ul class="main-menu">
+        {% for category in categories %}
+            {{ menu_links(category) }}
+        {% endfor %}
+    </ul>
+    <h2>News</h2>
 
     <table>
         <thead>
         <tr>
-            <td>id</td>
+            <td>
+                {% if app.request.get('order') == 'asc' %}
+                    <a href="?sort=id&order=desc">
+                        id
+                    </a>
+                {% else %}
+                    <a href="?sort=id&order=asc">
+                        id
+                    </a>
+                {% endif %}
+            </td>
             <td>name</td>
             <td>description</td>
             <td>
@@ -35,7 +67,7 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>
-                    <a href="{{ path('news.detail', {'slug': item.slug}) }}">{{ item.name }}</a>
+                    <a href="{{ path('news.show', {'slug': item.slug}) }}">{{ item.name }}</a>
                 </td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.createdAt|date('d.m.Y h:i:s') }}</td>
@@ -43,6 +75,6 @@
         {% endfor %}
         </tbody>
     </table>
-    {% include '_pagination.html.twig' with {'last_page': last_page, 'page_name': 'news_page'} %}
+    {% include '_pagination.html.twig' with {'last_page': last_page, 'page_name': 'news'} %}
 </div>
 {% endblock %}

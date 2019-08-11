@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CommentsRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class Comments
+class Comment
 {
     /**
      * @ORM\Id()
@@ -18,17 +19,20 @@ class Comments
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $text;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var News
      * @ORM\ManyToOne(targetEntity="App\Entity\News", inversedBy="comments")
+     * @ORM\JoinColumn(name="news_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $news;
 
@@ -61,14 +65,14 @@ class Comments
         return $this;
     }
 
-    public function getNewsId(): ?int
+    public function getNews(): ?News
     {
-        return $this->news_id;
+        return $this->news;
     }
 
-    public function setNewsId(int $news_id): self
+    public function setNews(News $news): self
     {
-        $this->news_id = $news_id;
+        $this->news = $news;
 
         return $this;
     }

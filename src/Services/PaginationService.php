@@ -16,8 +16,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaginationService implements PaginationServiceInterface
 {
-    const DEFAULT_SORT_FIELD = 'created_at';
-    const DEFAULT_ORDER = 'desc';
+    /** @var string $defaultSortField */
+    private $defaultSortField = 'id';
+
+    /** @var string $defaultOrder */
+    private $defaultOrder = 'desc';
+
     /**
      * @param QueryBuilder|Query $query
      * @param Request $request
@@ -36,6 +40,23 @@ class PaginationService implements PaginationServiceInterface
             ->setMaxResults($limit);
         return $paginator;
     }
+
+    /**
+     * @param string $field
+     */
+    public function setDefaultSortField(string $field): void
+    {
+        $this->defaultSortField = $field;
+    }
+
+    /**
+     * @param string $order
+     */
+    public function setDefaultOrder(string $order): void
+    {
+        $this->defaultOrder = $order;
+    }
+
     /**
      * @param Paginator $paginator
      * @return int
@@ -61,22 +82,35 @@ class PaginationService implements PaginationServiceInterface
         return !$paginator->getIterator()->count();
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     private function getSort(Request $request): string
     {
         if ($request->query->has('sort')) {
             return $request->query->get('sort');
         }
-        return self::DEFAULT_SORT_FIELD;
+        return $this->defaultSortField;
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     private function getOrder(Request $request): string
     {
         if ($request->query->has('order')) {
             return $request->query->get('order');
         }
-        return self::DEFAULT_ORDER;
+        return $this->defaultOrder;
     }
 
+    /**
+     * @param Request $request
+     * @param string $name
+     * @return string
+     */
     private function getCurrentPage(Request $request, string $name): string
     {
         return $request->query->getInt($name) ?: 1;

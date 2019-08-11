@@ -22,6 +22,9 @@ trait EntitySluggableTrait
      */
     protected $slug;
 
+    /**
+     * @return string
+     */
     public function getSlug(): string
     {
         return $this->slug;

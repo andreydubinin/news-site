@@ -31,16 +31,25 @@ trait EntityTimestampableTrait
      */
     protected $updated_at;
 
+    /**
+     * @return \DateTime
+     */
     public function getCreatedAt(): \DateTime
     {
         return $this->created_at;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getUpdatedAt(): \DateTime
     {
         return $this->updated_at;
     }
 
+    /**
+     * @param \DateTime $updatedAt
+     */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updated_at = $updatedAt;

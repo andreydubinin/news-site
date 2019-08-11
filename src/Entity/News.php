@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\EntitySluggableTrait;
 use App\Entity\Traits\EntityTimestampableTrait;
+use \Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,9 +39,22 @@ class News
     private $text;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $is_active = true;
+    private $is_active = false;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="news")
+     */
+    private $comments;
+
+    /**
+     * @var Category
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="news")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $category;
 
     public function getId(): ?int
     {
@@ -96,6 +110,37 @@ class News
     public function setIsActive(bool $is_active): self
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        $this->comments->removeElement($comment);
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

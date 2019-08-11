@@ -1,6 +1,6 @@
 {% set _currentPage = app.request.query.get(page_name) ?: 1 %}
 {% set _currentRoute = app.request.attributes.get('_route') %}
-{% set _currentParams = app.request.query.all %}
+{% set _currentParams = app.request.query.all|merge(app.request.attributes.get('_route_params')) %}
 {% if last_page > 1 %}
 	<nav>
 		<ul class="pagination">

@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 interface PaginationServiceInterface
 {
     public function paginate($query, Request $request, int $limit, string $name = 'p'): Paginator;
+    public function setDefaultSortField(string $field): void;
+    public function setDefaultOrder(string $order): void;
     public function lastPage(Paginator $paginator): int;
     public function total(Paginator $paginator): int;
     public function currentPageHasNoResult(Paginator $paginator): bool;
